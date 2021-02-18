@@ -1,21 +1,3 @@
-/* =================================================
- * This file is part of the TTK qmmp plugin project
- * Copyright (C) 2015 - 2020 Greedysky Studio
-
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; If not, see <http://www.gnu.org/licenses/>.
- ================================================= */
-
 #include "ayflyhelper.h"
 #include "decoder_ayfly.h"
 #include "decoderayflyfactory.h"
@@ -32,7 +14,7 @@ DecoderProperties DecoderAyflyFactory::properties() const
     properties.filters << "*.vtx" << "*.asc" << "*.sqt" << "*psg";
     properties.filters << "*.stc" << "*.stp";
     properties.filters << "*.pt1" << "*.pt2" << "*.pt3" << "*.psc";
-    properties.filters << "*.ay" << "*.ym";
+    properties.filters << "*.ay";
     properties.description = tr("AY/YM Audio Files");
     properties.shortName = "alfly";
     properties.noInput = true;
@@ -72,10 +54,10 @@ QList<TrackInfo*> DecoderAyflyFactory::createPlayList(const QString &path, Track
     if(parts & TrackInfo::Properties)
     {
         info->setValue(Qmmp::BITRATE, helper.bitrate());
-        info->setValue(Qmmp::SAMPLERATE, helper.samplerate());
+        info->setValue(Qmmp::SAMPLERATE, helper.sampleRate());
         info->setValue(Qmmp::CHANNELS, helper.channels());
         info->setValue(Qmmp::BITS_PER_SAMPLE, helper.bitsPerSample());
-        info->setValue(Qmmp::FORMAT_NAME, "ayfly");
+        info->setValue(Qmmp::FORMAT_NAME, "ALFLY");
         info->setDuration(helper.totalTime());
     }
 

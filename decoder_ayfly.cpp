@@ -1,25 +1,8 @@
-/* =================================================
- * This file is part of the TTK qmmp plugin project
- * Copyright (C) 2015 - 2020 Greedysky Studio
-
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; If not, see <http://www.gnu.org/licenses/>.
- ================================================= */
-
 #include "ayflyhelper.h"
 #include "decoder_ayfly.h"
 
-DecoderAyfly::DecoderAyfly(const QString &path) : Decoder()
+DecoderAyfly::DecoderAyfly(const QString &path)
+    : Decoder()
 {
     m_ayfly = new AyflyHelper(path);
 }
@@ -33,13 +16,15 @@ bool DecoderAyfly::initialize()
 {
     if(!m_ayfly->initialize())
     {
+        qWarning("DecoderAyfly: initialize failed");
         return false;
     }
 
-    int rate = m_ayfly->samplerate();
+    int rate = m_ayfly->sampleRate();
     int channels = m_ayfly->channels();
     if(rate == 0 || channels == 0)
     {
+        qWarning("DecoderAyfly: rate or channel invalid");
         return false;
     }
 

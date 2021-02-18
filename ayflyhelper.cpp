@@ -1,28 +1,14 @@
-/* =================================================
- * This file is part of the TTK qmmp plugin project
- * Copyright (C) 2015 - 2020 Greedysky Studio
-
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; If not, see <http://www.gnu.org/licenses/>.
- ================================================= */
-
 #include "ayflyhelper.h"
 
-AyflyHelper::AyflyHelper(const QString &path)
+bool endCallback(void *)
 {
-    m_path = path;
+    return true;
+}
+
+AyflyHelper::AyflyHelper(const QString &path)
+    : m_path(path)
+{
     m_info = (ay_info_t*)calloc(sizeof(ay_info_t), 1);
-    m_totalTime = 0;
 }
 
 AyflyHelper::~AyflyHelper()
@@ -44,42 +30,50 @@ void AyflyHelper::close()
 
 bool AyflyHelper::initialize()
 {
-    FILE *file = stdio_open(m_path.toLocal8Bit().constData());
+    FILE *file = stdio_open(qPrintable(m_path));
     if(!file)
     {
+        qWarning("AyflyHelper: open file failed");
         return false;
     }
 
     int size = stdio_length(file);
     if(size <= 0)
     {
+        qWarning("AyflyHelper: file size invalid");
+        stdio_close(file);
         return false;
     }
 
     unsigned char *module = (unsigned char *)malloc(size);
     if(!module)
     {
+        qWarning("AyflyHelper: file data read error");
+        stdio_close(file);
         return false;
     }
 
     stdio_read(module, size, 1, file);
     stdio_close(file);
 
-    if(!ay_initsongindirect(module, samplerate(), size))
+    if(!ay_initsongindirect(module, sampleRate(), size))
     {
+        qWarning("AyflyHelper: ay_initsongindirect error");
         free(module);
         return false;
     }
     free(module);
 
-    m_info->ay = ay_initsong(m_path.toLocal8Bit().constData(), samplerate());
+    m_info->ay = ay_initsong(qPrintable(m_path), sampleRate());
     if(!m_info->ay)
     {
+        qWarning("AyflyHelper: ay_initsong error");
         return false;
     }
 
     m_info->length = ay_getsonglength(m_info->ay) / 50 * 1000;
-    m_info->rate = size * 8.0 / m_info->length;
+    m_info->rate = size * 8.0 / m_info->length + 1.0f;
+    ay_setelapsedcallback(m_info->ay, endCallback, nullptr);
 
     m_meta.insert("title", ay_getsongname(m_info->ay));
     m_meta.insert("artist", ay_getsongauthor(m_info->ay));
@@ -102,7 +96,7 @@ int AyflyHelper::bitrate() const
     return m_info->rate;
 }
 
-int AyflyHelper::samplerate() const
+int AyflyHelper::sampleRate() const
 {
     return 44100;
 }

@@ -1,6 +1,6 @@
 /* =================================================
  * This file is part of the TTK qmmp plugin project
- * Copyright (C) 2015 - 2020 Greedysky Studio
+ * Copyright (C) 2015 - 2021 Greedysky Studio
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #define AYFLYHELPER_H
 
 extern "C" {
-#include "ayfly/ayfly.h"
+#include "ayfly.h"
 #include "stdio_file.h"
 }
 #include <QVariantMap>
@@ -37,8 +37,8 @@ typedef struct {
 class AyflyHelper
 {
 public:
-    AyflyHelper(const QString &path);
-    virtual ~AyflyHelper();
+    explicit AyflyHelper(const QString &path);
+    ~AyflyHelper();
 
     void close();
 
@@ -47,7 +47,7 @@ public:
     void seek(qint64 time);
 
     int bitrate() const;
-    int samplerate() const;
+    int sampleRate() const;
     int channels() const;
     int bitsPerSample() const;
 
@@ -60,8 +60,8 @@ public:
 private:
     QString m_path;
     ay_info_t *m_info;
-    qint64 m_totalTime;
     QVariantMap m_meta;
+
 };
 
 #endif
