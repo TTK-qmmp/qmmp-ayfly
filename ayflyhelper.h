@@ -20,6 +20,7 @@
 #define AYFLYHELPER_H
 
 extern "C" {
+#undef _UNICODE
 #include "ayfly.h"
 #include "stdio_file.h"
 }

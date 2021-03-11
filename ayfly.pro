@@ -26,6 +26,11 @@ SOURCES += decoderayflyfactory.cpp \
            ayfly/Filter3.cpp \
            ayfly/z80ex/z80ex.c
 
+INCLUDEPATH += ayfly \
+               ayfly/z80ex
+
+DEFINES += DISABLE_AUDIO
+
 unix {
     target.path = $$PLUGIN_DIR/Input
     INSTALLS += target

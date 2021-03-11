@@ -2,6 +2,8 @@
 #include "decoder_ayfly.h"
 #include "decoderayflyfactory.h"
 
+#include <QMessageBox>
+
 bool DecoderAyflyFactory::canDecode(QIODevice *) const
 {
     return false;
@@ -69,4 +71,21 @@ MetaDataModel* DecoderAyflyFactory::createMetaDataModel(const QString &path, boo
     Q_UNUSED(path);
     Q_UNUSED(readOnly);
     return nullptr;
+}
+
+void DecoderAyflyFactory::showSettings(QWidget *parent)
+{
+    Q_UNUSED(parent);
+}
+
+void DecoderAyflyFactory::showAbout(QWidget *parent)
+{
+    QMessageBox::about (parent, tr("About Ayfly Reader Plugin"),
+                        tr("Qmmp Ayfly Reader Plugin")+"\n"+
+                        tr("Written by: Greedysky <greedysky@163.com>"));
+}
+
+QString DecoderAyflyFactory::translation() const
+{
+    return QString();
 }
