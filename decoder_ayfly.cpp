@@ -20,8 +20,8 @@ bool DecoderAyfly::initialize()
         return false;
     }
 
-    int rate = m_ayfly->sampleRate();
-    int channels = m_ayfly->channels();
+    const int rate = m_ayfly->sampleRate();
+    const int channels = m_ayfly->channels();
     if(rate == 0 || channels == 0)
     {
         qWarning("DecoderAyfly: rate or channel invalid");
@@ -29,7 +29,7 @@ bool DecoderAyfly::initialize()
     }
 
     configure(rate, channels, Qmmp::PCM_S16LE);
-
+    qDebug("DecoderAyfly: initialize succes");
     return true;
 }
 

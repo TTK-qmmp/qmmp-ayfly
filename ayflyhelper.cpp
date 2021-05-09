@@ -37,7 +37,7 @@ bool AyflyHelper::initialize()
         return false;
     }
 
-    int size = stdio_length(file);
+    const int64_t size = stdio_length(file);
     if(size <= 0)
     {
         qWarning("AyflyHelper: file size invalid");
@@ -114,9 +114,4 @@ int AyflyHelper::bitsPerSample() const
 int AyflyHelper::read(unsigned char *buf, int size)
 {
     return ay_rendersongbuffer(m_info->ay, buf, size);
-}
-
-QVariantMap AyflyHelper::readMetaTags()
-{
-    return m_meta;
 }
