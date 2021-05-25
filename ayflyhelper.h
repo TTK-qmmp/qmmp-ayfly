@@ -22,10 +22,10 @@
 #undef _UNICODE
 extern "C" {
 #include "ayfly.h"
-#include "stdio_file.h"
 }
 #include <QMap>
-#include <QString>
+#include <QFile>
+#include <qmmp/qmmp.h>
 
 typedef struct {
     void *ay;
@@ -42,7 +42,7 @@ public:
     explicit AyflyHelper(const QString &path);
     ~AyflyHelper();
 
-    void close();
+    void deinit();
 
     bool initialize();
     int totalTime() const;
@@ -54,14 +54,12 @@ public:
     int bitsPerSample() const;
 
     int read(unsigned char *buf, int size);
-
-    inline QString title() const { return m_meta.value("title"); }
-    inline QString artist() const { return m_meta.value("artist"); }
+    const QMap<Qmmp::MetaData, QString> &readMetaData() const;
 
 private:
     QString m_path;
     ay_info *m_info;
-    QMap<QString, QString> m_meta;
+    QMap<Qmmp::MetaData, QString> m_metaData;
 
 };
 

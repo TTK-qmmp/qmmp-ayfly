@@ -13,10 +13,10 @@ AyflyHelper::AyflyHelper(const QString &path)
 
 AyflyHelper::~AyflyHelper()
 {
-    close();
+    deinit();
 }
 
-void AyflyHelper::close()
+void AyflyHelper::deinit()
 {
     if(m_info) 
     {
@@ -30,39 +30,21 @@ void AyflyHelper::close()
 
 bool AyflyHelper::initialize()
 {
-    FILE *file = stdio_open(qPrintable(m_path));
-    if(!file)
+    QFile file(m_path);
+    if(!file.open(QFile::ReadOnly))
     {
-        qWarning("AyflyHelper: open file failed");
+        qWarning("AsapHelper: open file failed");
         return false;
     }
 
-    const int64_t size = stdio_length(file);
-    if(size <= 0)
-    {
-        qWarning("AyflyHelper: file size invalid");
-        stdio_close(file);
-        return false;
-    }
+    const qint64 size = file.size();
+    const QByteArray module = file.readAll();
 
-    unsigned char *module = (unsigned char *)malloc(size);
-    if(!module)
-    {
-        qWarning("AyflyHelper: file data read error");
-        stdio_close(file);
-        return false;
-    }
-
-    stdio_read(module, size, 1, file);
-    stdio_close(file);
-
-    if(!ay_initsongindirect(module, sampleRate(), size))
+    if(!ay_initsongindirect((unsigned char *)module.constData(), sampleRate(), size))
     {
         qWarning("AyflyHelper: ay_initsongindirect error");
-        free(module);
         return false;
     }
-    free(module);
 
     m_info->ay = ay_initsong(qPrintable(m_path), sampleRate());
     if(!m_info->ay)
@@ -75,9 +57,8 @@ bool AyflyHelper::initialize()
     m_info->rate = size * 8.0 / m_info->length + 1.0f;
     ay_setelapsedcallback(m_info->ay, endCallback, nullptr);
 
-    m_meta.insert("title", ay_getsongname(m_info->ay));
-    m_meta.insert("artist", ay_getsongauthor(m_info->ay));
-
+    m_metaData.insert(Qmmp::TITLE, ay_getsongname(m_info->ay));
+    m_metaData.insert(Qmmp::ARTIST, ay_getsongauthor(m_info->ay));
     return true;
 }
 
@@ -114,4 +95,9 @@ int AyflyHelper::bitsPerSample() const
 int AyflyHelper::read(unsigned char *buf, int size)
 {
     return ay_rendersongbuffer(m_info->ay, buf, size);
+}
+
+const QMap<Qmmp::MetaData, QString> &AyflyHelper::readMetaData() const
+{
+    return m_metaData;
 }
