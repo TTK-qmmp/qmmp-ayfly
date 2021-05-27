@@ -4,29 +4,23 @@ TARGET = $$PLUGINS_PREFIX/Input/ayfly
 
 HEADERS += decoderayflyfactory.h \
            decoder_ayfly.h \
-           ayflyhelper.h \
-           ayfly/AbstractAudio.h \
-           ayfly/ay.h  \
-           ayfly/ayfly.h  \
-           ayfly/ayflyString.h  \
-           ayfly/Filter3.h \
-           ayfly/z80ex/z80ex.h
+           ayflyhelper.h
     
 SOURCES += decoderayflyfactory.cpp \
            decoder_ayfly.cpp \
            ayflyhelper.cpp \
-           ayfly/AbstractAudio.cpp \
-           ayfly/ay.cpp  \
-           ayfly/formats.cpp  \
-           ayfly/speccy.cpp  \
-           ayfly/lha.cpp  \
-           ayfly/common.cpp  \
-           ayfly/ayflyString.cpp  \
-           ayfly/Filter3.cpp \
-           ayfly/z80ex/z80ex.c
+           libayfly/AbstractAudio.cpp \
+           libayfly/ay.cpp \
+           libayfly/formats.cpp \
+           libayfly/speccy.cpp \
+           libayfly/lha.cpp \
+           libayfly/common.cpp \
+           libayfly/ayflyString.cpp \
+           libayfly/Filter3.cpp \
+           libayfly/z80ex/z80ex.c
 
-INCLUDEPATH += ayfly \
-               ayfly/z80ex
+INCLUDEPATH += $$PWD/libayfly \
+               $$PWD/libayfly/z80ex
 
 DEFINES += DISABLE_AUDIO
 
