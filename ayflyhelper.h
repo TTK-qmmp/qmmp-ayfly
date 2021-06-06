@@ -21,17 +21,17 @@
 
 #undef _UNICODE
 extern "C" {
-#include "ayfly.h"
+#include <libayfly/ayfly.h>
 }
 #include <QMap>
 #include <QFile>
 #include <qmmp/qmmp.h>
 
 typedef struct {
-    void *ay;
-    int rate;
+    void *input;
     int length;
-} ay_info;
+    int bitrate;
+} decode_info;
 
 /*!
  * @author Greedysky <greedysky@163.com>
@@ -58,7 +58,7 @@ public:
 
 private:
     QString m_path;
-    ay_info *m_info;
+    decode_info *m_info;
     QMap<Qmmp::MetaData, QString> m_metaData;
 
 };
