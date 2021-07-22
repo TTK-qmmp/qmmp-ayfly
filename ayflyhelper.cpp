@@ -54,7 +54,7 @@ bool AyflyHelper::initialize()
     }
 
     m_info->length = ay_getsonglength(m_info->input) / 50 * 1000;
-    m_info->bitrate = size * 8.0 / m_info->length + 1.0f;
+    m_info->bitrate = size * 8.0 / totalTime() + 1.0f;
     ay_setelapsedcallback(m_info->input, endCallback, nullptr);
 
     m_metaData.insert(Qmmp::TITLE, ay_getsongname(m_info->input));
@@ -62,7 +62,7 @@ bool AyflyHelper::initialize()
     return true;
 }
 
-int AyflyHelper::totalTime() const
+qint64 AyflyHelper::totalTime() const
 {
     return m_info->length;
 }
@@ -92,9 +92,9 @@ int AyflyHelper::bitsPerSample() const
     return 16;
 }
 
-int AyflyHelper::read(unsigned char *buf, int size)
+qint64 AyflyHelper::read(unsigned char *data, qint64 maxSize)
 {
-    return ay_rendersongbuffer(m_info->input, buf, size);
+    return ay_rendersongbuffer(m_info->input, data, maxSize);
 }
 
 const QMap<Qmmp::MetaData, QString> &AyflyHelper::readMetaData() const
