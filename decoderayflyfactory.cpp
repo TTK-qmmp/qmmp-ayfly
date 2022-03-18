@@ -1,6 +1,6 @@
+#include "decoderayflyfactory.h"
 #include "ayflyhelper.h"
 #include "decoder_ayfly.h"
-#include "decoderayflyfactory.h"
 
 #include <QMessageBox>
 
@@ -12,7 +12,7 @@ bool DecoderAyflyFactory::canDecode(QIODevice *) const
 DecoderProperties DecoderAyflyFactory::properties() const
 {
     DecoderProperties properties;
-    properties.name = "AyFly Plugin";
+    properties.name = tr("AyFly Plugin");
     properties.shortName = "alfly";
     properties.filters << "*.vtx" << "*.asc" << "*.sqt" << "*psg";
     properties.filters << "*.stc" << "*.stp";
@@ -20,7 +20,6 @@ DecoderProperties DecoderAyflyFactory::properties() const
     properties.filters << "*.ay";
     properties.filters << "*.emul";
     properties.description = "AY/YM Audio File";
-    properties.protocols << "file";
     properties.noInput = true;
     return properties;
 }
@@ -34,7 +33,6 @@ Decoder *DecoderAyflyFactory::create(const QString &path, QIODevice *input)
 QList<TrackInfo*> DecoderAyflyFactory::createPlayList(const QString &path, TrackInfo::Parts parts, QStringList *)
 {
     TrackInfo *info = new TrackInfo(path);
-
     if(parts == TrackInfo::Parts())
     {
         return QList<TrackInfo*>() << info;
@@ -61,11 +59,10 @@ QList<TrackInfo*> DecoderAyflyFactory::createPlayList(const QString &path, Track
         info->setValue(Qmmp::BITRATE, helper.bitrate());
         info->setValue(Qmmp::SAMPLERATE, helper.sampleRate());
         info->setValue(Qmmp::CHANNELS, helper.channels());
-        info->setValue(Qmmp::BITS_PER_SAMPLE, helper.bitsPerSample());
+        info->setValue(Qmmp::BITS_PER_SAMPLE, helper.depth());
         info->setValue(Qmmp::FORMAT_NAME, "AyFly");
         info->setDuration(helper.totalTime());
     }
-
     return QList<TrackInfo*>() << info;
 }
 

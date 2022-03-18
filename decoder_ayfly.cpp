@@ -1,5 +1,5 @@
-#include "ayflyhelper.h"
 #include "decoder_ayfly.h"
+#include "ayflyhelper.h"
 
 DecoderAyfly::DecoderAyfly(const QString &path)
     : Decoder()
@@ -29,7 +29,7 @@ bool DecoderAyfly::initialize()
     }
 
     configure(rate, channels, Qmmp::PCM_S16LE);
-    qDebug("DecoderAyfly: initialize succes");
+    qDebug("DecoderAyfly: initialize success");
     return true;
 }
 
@@ -48,7 +48,7 @@ qint64 DecoderAyfly::read(unsigned char *data, qint64 maxSize)
     return m_helper->read(data, maxSize);
 }
 
-void DecoderAyfly::seek(qint64 pos)
+void DecoderAyfly::seek(qint64 time)
 {
-    m_helper->seek(pos);
+    m_helper->seek(time);
 }
