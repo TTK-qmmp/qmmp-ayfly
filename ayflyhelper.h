@@ -19,12 +19,10 @@
 #ifndef AYFLYHELPER_H
 #define AYFLYHELPER_H
 
-extern "C" {
-#include <libayfly/ayfly.h>
-}
 #include <QMap>
 #include <QFile>
 #include <qmmp/qmmp.h>
+#include <libayfly/ayfly.h>
 
 /*!
  * @author Greedysky <greedysky@163.com>
@@ -41,20 +39,20 @@ public:
     inline void seek(qint64 time) { ay_seeksong(m_input, time / 1000 * 50); }
     inline qint64 totalTime() const { return m_length; }
 
-    inline int bitrate() const { return m_bitrate; }
+    inline int bitrate() const { return 8; }
     inline int sampleRate() const { return 44100; }
     inline int channels() const { return 2; }
     inline int depth() const { return 16; }
 
     inline qint64 read(unsigned char *data, qint64 maxSize) { return ay_rendersongbuffer(m_input, data, maxSize); }
-    inline const QMap<Qmmp::MetaData, QString> &readMetaData() const { return m_metaData; }
+
+    inline QString title() const { return ay_getsongname(m_input); }
+    inline QString author() const { return ay_getsongauthor(m_input); }
 
 private:
     QString m_path;
     void *m_input = nullptr;
     int m_length = 0;
-    int m_bitrate = 0;
-    QMap<Qmmp::MetaData, QString> m_metaData;
 
 };
 

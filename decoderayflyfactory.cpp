@@ -4,9 +4,16 @@
 
 #include <QMessageBox>
 
-bool DecoderAyflyFactory::canDecode(QIODevice *) const
+bool DecoderAyflyFactory::canDecode(QIODevice *input) const
 {
-    return false;
+    QFile *file = static_cast<QFile*>(input);
+    if(!file)
+    {
+        return false;
+    }
+
+    AyflyHelper helper(file->fileName());
+    return helper.initialize();
 }
 
 DecoderProperties DecoderAyflyFactory::properties() const
@@ -14,12 +21,16 @@ DecoderProperties DecoderAyflyFactory::properties() const
     DecoderProperties properties;
     properties.name = tr("AyFly Plugin");
     properties.shortName = "alfly";
-    properties.filters << "*.vtx" << "*.asc" << "*.sqt" << "*psg";
-    properties.filters << "*.stc" << "*.stp";
-    properties.filters << "*.pt1" << "*.pt2" << "*.pt3";
-    properties.filters << "*.ay";
+    properties.filters << "*.asc" << "*.ay";
     properties.filters << "*.emul";
+    properties.filters << "*.sqt";
+    properties.filters << "*.st13" << "*.stc" << "*.stp" << "*.stp2";
+    properties.filters << "*.psc" << "*.psg";
+    properties.filters << "*.pt1" << "*.pt2" << "*.pt3";
+    properties.filters << "*.vtx";
+    properties.filters << "*.zxs";
     properties.description = "AY/YM Audio File";
+    properties.protocols << "file";
     properties.noInput = true;
     return properties;
 }
@@ -47,11 +58,8 @@ QList<TrackInfo*> DecoderAyflyFactory::createPlayList(const QString &path, Track
 
     if(parts & TrackInfo::MetaData)
     {
-        const QMap<Qmmp::MetaData, QString> metaData(helper.readMetaData());
-        for(auto itr = metaData.begin(); itr != metaData.end(); ++itr)
-        {
-            info->setValue(itr.key(), itr.value());
-        }
+        info->setValue(Qmmp::TITLE, helper.title());
+        info->setValue(Qmmp::ARTIST, helper.author());
     }
 
     if(parts & TrackInfo::Properties)
@@ -60,7 +68,7 @@ QList<TrackInfo*> DecoderAyflyFactory::createPlayList(const QString &path, Track
         info->setValue(Qmmp::SAMPLERATE, helper.sampleRate());
         info->setValue(Qmmp::CHANNELS, helper.channels());
         info->setValue(Qmmp::BITS_PER_SAMPLE, helper.depth());
-        info->setValue(Qmmp::FORMAT_NAME, "AyFly");
+        info->setValue(Qmmp::FORMAT_NAME, "AY/YM Audio");
         info->setDuration(helper.totalTime());
     }
     return QList<TrackInfo*>() << info;

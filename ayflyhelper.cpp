@@ -34,7 +34,8 @@ bool AyflyHelper::initialize()
     }
 
     const qint64 size = file.size();
-    const QByteArray module = file.readAll();
+    const QByteArray &module = file.readAll();
+    file.close();
 
     if(!ay_initsongindirect((unsigned char *)module.constData(), sampleRate(), size))
     {
@@ -50,10 +51,6 @@ bool AyflyHelper::initialize()
     }
 
     m_length = ay_getsonglength(m_input) / 50 * 1000;
-    m_bitrate = size * 8.0 / totalTime() + 1.0f;
     ay_setelapsedcallback(m_input, endCallback, nullptr);
-
-    m_metaData.insert(Qmmp::TITLE, ay_getsongname(m_input));
-    m_metaData.insert(Qmmp::ARTIST, ay_getsongauthor(m_input));
     return true;
 }
