@@ -32,6 +32,7 @@ DecoderProperties DecoderAyflyFactory::properties() const
     properties.description = "AY/YM Audio File";
     properties.protocols << "file";
     properties.noInput = true;
+    properties.hasAbout = true;
     return properties;
 }
 
