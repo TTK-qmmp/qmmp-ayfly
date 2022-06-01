@@ -33,11 +33,10 @@ bool AyflyHelper::initialize()
         return false;
     }
 
-    const qint64 size = file.size();
-    const QByteArray &module = file.readAll();
+    const QByteArray &buffer = file.readAll();
     file.close();
 
-    if(!ay_initsongindirect((unsigned char *)module.constData(), sampleRate(), size))
+    if(!ay_initsongindirect((unsigned char *)buffer.constData(), sampleRate(), buffer.length()))
     {
         qWarning("AyflyHelper: ay_initsongindirect error");
         return false;
