@@ -82,10 +82,18 @@ MetaDataModel* DecoderAyflyFactory::createMetaDataModel(const QString &path, boo
     return nullptr;
 }
 
+#if (QMMP_VERSION_INT < 0x10700) || (0x20000 <= QMMP_VERSION_INT && QMMP_VERSION_INT < 0x20200)
 void DecoderAyflyFactory::showSettings(QWidget *parent)
 {
     Q_UNUSED(parent);
 }
+#else
+QDialog *DecoderAyflyFactory::createSettings(QWidget *parent)
+{
+    Q_UNUSED(parent);
+    return nullptr;
+}
+#endif
 
 void DecoderAyflyFactory::showAbout(QWidget *parent)
 {
