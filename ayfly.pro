@@ -23,8 +23,7 @@ SOURCES += decoderayflyfactory.cpp \
            libayfly/Filter3.cpp \
            libayfly/z80ex/z80ex.c
 
-INCLUDEPATH += $$PWD/libayfly \
-               $$PWD/libayfly/z80ex
+INCLUDEPATH += $$PWD/libayfly/z80ex
 
 DEFINES += DISABLE_AUDIO
 
