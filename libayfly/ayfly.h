@@ -21,6 +21,8 @@
 #ifndef AYFLY_H_
 #    define AYFLY_H_
 
+#undef _UNICODE
+
 #ifdef _UNICODE
 #   ifndef AYFLY_UNICODE
 #       define AYFLY_UNICODE
