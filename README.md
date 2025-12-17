@@ -1,5 +1,6 @@
 This is a plugin for Qmmp (1.6.0 or greater) which supports Ayfly file.
-(AY/YM Audio File)
+
+Based on [Ayfly](https://github.com/l29ah/ayfly) (AY-3-8910 music player).
 
 The following packages are required, including development headers,
 which some vendors split into separate packages:

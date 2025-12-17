@@ -99,7 +99,9 @@ void DecoderAyflyFactory::showAbout(QWidget *parent)
 {
     QMessageBox::about(parent, tr("About Ayfly Reader Plugin"),
                        tr("Qmmp Ayfly Reader Plugin") + "\n" +
-                       tr("Written by: Greedysky <greedysky@163.com>"));
+                       tr("Written by: Greedysky <greedysky@163.com>") + "\n" +
+                       tr("Based on the source code from the Ayfly") + "\n" +
+                       tr("Written by Sergey Alirzaev (C) 2016"));
 }
 
 QString DecoderAyflyFactory::translation() const
