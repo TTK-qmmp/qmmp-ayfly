@@ -82,7 +82,7 @@ TrackInfoList DecoderAyflyFactory::createPlayList(const QString &path, TrackInfo
     return {raw};
 }
 
-MetaDataModel* DecoderAyflyFactory::createMetaDataModel(const QString &path, bool readOnly)
+MetaDataModel *DecoderAyflyFactory::createMetaDataModel(const QString &path, bool readOnly)
 {
     Q_UNUSED(path);
     Q_UNUSED(readOnly);
